@@ -33,6 +33,7 @@ export function TimesheetDetail({ id }: { id: string }) {
   }, [id]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
   }, [load]);
 

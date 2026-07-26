@@ -66,6 +66,9 @@ Password: password123
 - **Filters** — status filter and a from/to date range. Per the brief, a range that
   spans multiple weeks returns **every overlapping week**. Filtering happens on the
   server (in the API route).
+- **Pagination** — a per-page selector (5 / 10 / 20) and page controls with ellipsis
+  (`1 2 3 … 99`). Changing a filter or page size resets to page one, and the page is
+  clamped if the row count shrinks. The mock data spans 12 weeks so it actually pages.
 - **Week detail screen** (`/dashboard/[id]`) — "This week's timesheet" with a 40h
   progress bar, entries grouped per day (Mon–Fri), a per-row overflow menu
   (Edit / Delete), and an "+ Add new task" action on each day. Row actions on the
@@ -101,14 +104,15 @@ app/
 auth.ts                          next-auth config (Credentials provider)
 proxy.ts                         route protection (Next 16 middleware)
 components/
-  ui/                            Button + form Field primitives
-  Header, StatusBadge, TimesheetTable, TimesheetFilters,
+  ui/                            Button, Field, Badge primitives
+  Header, StatusBadge, TimesheetTable, TimesheetFilters, Pagination,
   TimesheetDashboard, TimesheetDetail, EntryRow, EntryModal
 lib/
   types.ts                       shared domain types + option lists
   mock-data.ts                   in-memory fixtures (API-only)
   store.ts                       status derivation + CRUD (server-only)
   validation.ts                  shared form validation (client + server)
+  pagination.ts                  page-slicing + ellipsis logic
   api.ts                         client fetch helpers
   format.ts                      date/label formatting
 ```
@@ -131,11 +135,15 @@ All are auth-gated and return `{ data }` on success or `{ error, errors? }` on f
 npm test
 ```
 
-12 tests across 3 files covering the highest-value, framework-agnostic logic:
+29 tests across 7 files covering the highest-value, framework-agnostic logic:
 
+- `lib/store.test.ts` — status derivation at the boundaries + date-range overlap filtering
 - `lib/validation.test.ts` — entry validation rules (required fields, hour bounds, allowed options)
+- `lib/pagination.test.ts` — page slicing and the page-number/ellipsis logic
 - `lib/format.test.ts` — week-range and day formatting
 - `components/TimesheetTable.test.tsx` — status→action mapping, date rendering, click handling, empty state
+- `components/Pagination.test.tsx` — Previous/Next enablement, active page, per-page changes
+- `components/ui/Badge.test.tsx` — theme/text/close-icon props
 
 ## Assumptions & notes
 
@@ -149,13 +157,16 @@ npm test
   never shifts with the viewer's timezone.
 - Dashboard row actions (`View` / `Update` / `Create`) all navigate to the same
   week detail screen; the label just reflects the week's status.
+- **Pagination is client-side** — the list endpoint returns all filtered weeks and
+  the dashboard pages them in memory. Fine at this scale; a larger dataset would move
+  `page`/`perPage` into the API query.
 
 ## Deferred to v2
 
 Deliberately out of scope for the lean version, to keep it focused and correct:
 
-- **Pagination UI** (the dataset is 5 weeks; the API is ready to paginate).
 - Broader test coverage (modal submit flow, API route handlers).
+- Server-side pagination and sorting.
 
 ## Time spent
 
