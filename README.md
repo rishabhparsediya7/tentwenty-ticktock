@@ -130,4 +130,4 @@ timesheet table, the pagination controls, the badge, and the entry modal's defau
 
 ## Time spent
 
-~5 hours.
+~12-14 hours.
