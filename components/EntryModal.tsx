@@ -25,7 +25,7 @@ interface EntryModalProps {
 const emptyForm = (date: string): EntryInput => ({
   date,
   project: "",
-  typeOfWork: "",
+  typeOfWork: WORK_TYPE_OPTIONS[0],
   description: "",
   hours: 8,
 });
@@ -155,9 +155,6 @@ export function EntryModal({ timesheetId, date, entry, onClose, onSaved }: Entry
               error={errors.typeOfWork}
               onChange={(e) => setField("typeOfWork", e.target.value)}
             >
-              <option value="" disabled>
-                Bug fixes
-              </option>
               {WORK_TYPE_OPTIONS.map((w) => (
                 <option key={w} value={w}>
                   {w}
