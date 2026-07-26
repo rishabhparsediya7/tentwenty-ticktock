@@ -1,7 +1,3 @@
-// In-memory mock data. This simulates a database and is ONLY imported by the
-// internal API routes (app/api/**) — never by React components directly.
-// Mutations from the API routes persist for the lifetime of the server process.
-
 import { Timesheet, User } from "./types";
 
 export const users: User[] = [
@@ -13,7 +9,6 @@ export const users: User[] = [
   },
 ];
 
-// Helper to keep the entry fixtures compact.
 function entry(
   id: string,
   timesheetId: string,
@@ -26,8 +21,18 @@ function entry(
   return { id, timesheetId, date, project, typeOfWork, description, hours };
 }
 
-// Five weeks of January 2024, mirroring the statuses shown in the Figma:
-// week 1 & 2 & 4 = 40h (COMPLETED), week 3 = 24h (INCOMPLETE), week 5 = 0h (MISSING).
+function addDays(iso: string, n: number): string {
+  const d = new Date(`${iso}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+function buildWeek(tsId: string, startDate: string, project: string, filledDays: number) {
+  return Array.from({ length: filledDays }, (_, i) =>
+    entry(`${tsId}-e${i + 1}`, tsId, addDays(startDate, i), project, "Feature", "Development work", 8)
+  );
+}
+
 export const timesheets: Timesheet[] = [
   {
     id: "ts1",
@@ -85,5 +90,54 @@ export const timesheets: Timesheet[] = [
     startDate: "2024-01-28",
     endDate: "2024-02-01",
     entries: [],
+  },
+  {
+    id: "ts6",
+    weekNumber: 6,
+    startDate: "2024-02-05",
+    endDate: "2024-02-09",
+    entries: buildWeek("ts6", "2024-02-05", "Mobile App", 5), // COMPLETED
+  },
+  {
+    id: "ts7",
+    weekNumber: 7,
+    startDate: "2024-02-12",
+    endDate: "2024-02-16",
+    entries: buildWeek("ts7", "2024-02-12", "Dashboard Redesign", 2), // INCOMPLETE
+  },
+  {
+    id: "ts8",
+    weekNumber: 8,
+    startDate: "2024-02-19",
+    endDate: "2024-02-23",
+    entries: [], // MISSING
+  },
+  {
+    id: "ts9",
+    weekNumber: 9,
+    startDate: "2024-02-26",
+    endDate: "2024-03-01",
+    entries: buildWeek("ts9", "2024-02-26", "Marketing Website", 5), // COMPLETED
+  },
+  {
+    id: "ts10",
+    weekNumber: 10,
+    startDate: "2024-03-04",
+    endDate: "2024-03-08",
+    entries: buildWeek("ts10", "2024-03-04", "Homepage Development", 4), // INCOMPLETE
+  },
+  {
+    id: "ts11",
+    weekNumber: 11,
+    startDate: "2024-03-11",
+    endDate: "2024-03-15",
+    entries: buildWeek("ts11", "2024-03-11", "Mobile App", 5), // COMPLETED
+  },
+  {
+    id: "ts12",
+    weekNumber: 12,
+    startDate: "2024-03-18",
+    endDate: "2024-03-22",
+    entries: [], // MISSING
   },
 ];
