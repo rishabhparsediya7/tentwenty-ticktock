@@ -12,6 +12,9 @@
   --color-status-incomplete-fg: #723B13;
   --color-status-missing-bg: #FCE8F3;
   --color-status-missing-fg: #99154B;
+
+  --color-tertiary: #4A5565;
+  --color-text-brand: #1447E6;
 }
 
 html,
