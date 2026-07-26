@@ -27,7 +27,7 @@ export function EntryRow({ entry, onEdit, onDelete }: EntryRowProps) {
           aria-label="Entry actions"
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          className="px-1.5 text-gray-400 hover:text-gray-600"
+          className="px-1.5 text-gray-400 hover:text-gray-600 cursor-pointer"
         >
           ⋯
         </button>
@@ -41,7 +41,7 @@ export function EntryRow({ entry, onEdit, onDelete }: EntryRowProps) {
                   setMenuOpen(false);
                   onEdit();
                 }}
-                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                className="cursor-pointer block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
               >
                 Edit
               </button>
@@ -50,7 +50,7 @@ export function EntryRow({ entry, onEdit, onDelete }: EntryRowProps) {
                   setMenuOpen(false);
                   onDelete();
                 }}
-                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
+                className="cursor-pointer block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
               >
                 Delete
               </button>
