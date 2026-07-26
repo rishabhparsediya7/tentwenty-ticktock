@@ -1,8 +1,3 @@
-// Server-side data access. Wraps the mock data with the small amount of business
-// logic the API routes need (status derivation, CRUD on entries). Importing this
-// from a React component would pull mock data into the client bundle, so it stays
-// server-only and is used exclusively by app/api/** route handlers.
-
 import { timesheets, users } from "./mock-data";
 import {
   EntryInput,
@@ -48,12 +43,10 @@ export function validateCredentials(email: string, password: string) {
 
 export interface ListFilters {
   status?: TimesheetStatus;
-  /** ISO date — include weeks overlapping [from, to]. */
   from?: string;
   to?: string;
 }
 
-/** Two ranges overlap if each starts on or before the other ends. */
 function overlaps(aStart: string, aEnd: string, bStart: string, bEnd: string) {
   return aStart <= bEnd && bStart <= aEnd;
 }
@@ -62,7 +55,6 @@ export function listTimesheets(filters: ListFilters = {}): TimesheetSummary[] {
   return timesheets
     .filter((ts) => {
       if (filters.from && filters.to) {
-        // Show every week overlapping the selected range, per the spec note.
         if (!overlaps(ts.startDate, ts.endDate, filters.from, filters.to)) return false;
       }
       if (filters.status && deriveStatus(totalHours(ts)) !== filters.status) return false;
