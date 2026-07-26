@@ -24,9 +24,6 @@ export function Pagination({
   const pageCount = computeTotalPages(totalItems, perPage);
   const pages = getPageNumbers(page, pageCount);
 
-  const cell =
-    "min-w-9 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium transition-colors";
-
   return (
     <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
       <div className="relative">
@@ -58,19 +55,25 @@ export function Pagination({
         </svg>
       </div>
 
-      <nav aria-label="Pagination" className="flex items-center gap-1.5">
+      <nav
+        aria-label="Pagination"
+        className="inline-flex items-center divide-x divide-gray-200 overflow-hidden rounded-lg border border-gray-200"
+      >
         <button
           type="button"
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
-          className={`${cell} text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50`}
+          className="inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-sm font-medium text-tertiary hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Previous
         </button>
 
         {pages.map((p, i) =>
           p === DOTS ? (
-            <span key={`dots-${i}`} className="px-2 text-sm text-gray-400">
+            <span
+              key={`dots-${i}`}
+              className="min-w-[3rem] select-none px-4 py-2 text-center text-sm text-gray-400"
+            >
               {DOTS}
             </span>
           ) : (
@@ -79,10 +82,10 @@ export function Pagination({
               type="button"
               onClick={() => onPageChange(p)}
               aria-current={p === page ? "page" : undefined}
-              className={`${cell} ${
+              className={`min-w-[3rem] px-4 py-2 text-center text-sm cursor-pointer ${
                 p === page
-                  ? "border-brand/30 bg-brand/5 text-brand"
-                  : "text-gray-600 hover:bg-gray-50"
+                  ? "bg-brand/5 font-semibold text-text-brand"
+                  : "text-gray-700 hover:bg-gray-50"
               }`}
             >
               {p}
@@ -94,7 +97,7 @@ export function Pagination({
           type="button"
           onClick={() => onPageChange(page + 1)}
           disabled={page >= pageCount}
-          className={`${cell} text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50`}
+          className="inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-sm font-medium text-tertiary hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next
         </button>
