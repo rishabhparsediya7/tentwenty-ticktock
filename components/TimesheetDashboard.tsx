@@ -22,7 +22,6 @@ export function TimesheetDashboard() {
     try {
       const data = await fetchTimesheets({
         status: filters.status || undefined,
-        // The range filter only applies when both ends are set.
         from: filters.from && filters.to ? filters.from : undefined,
         to: filters.from && filters.to ? filters.to : undefined,
       });
@@ -35,9 +34,6 @@ export function TimesheetDashboard() {
   }, [filters]);
 
   useEffect(() => {
-    // Fetching from our API is exactly the external-system sync effects are for;
-    // the loading-state update inside load() is intentional.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
   }, [load]);
 
