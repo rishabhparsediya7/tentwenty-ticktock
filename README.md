@@ -151,6 +151,9 @@ npm test
   mock data purely because it's a demo. Real auth would hash + use a real user store.
 - **Data is in-memory.** Entries you add/edit persist while the server runs and reset
   on restart — appropriate for a mock-data assessment (no DB was in scope).
+- **Weeks are generated relative to today**, newest first, so a visitor lands on the
+  current week (in progress, partially filled) with recent weeks already populated —
+  rather than stale fixed dates. Restarting the server re-anchors them to "now".
 - Status is **always derived** from hours rather than stored, so it can't drift out
   of sync with the entries.
 - Dates are treated as plain calendar dates (parsed as UTC) so the displayed day
